@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import './style.css';
 
 function RegisterForm() {
@@ -17,6 +18,10 @@ function RegisterForm() {
     email: '',
     confirm_email: ''
   });
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -122,11 +127,22 @@ function RegisterForm() {
       axios.post('http://localhost:3000/register', formData)
         .then((response) => {
           console.log('Usuario registrado:', response.data);
+          // Redirigir a la página de login después del registro exitoso
+          navigate('/login');
         })
         .catch((error) => {
           console.error('Error al registrar el usuario:', error);
         });
     }
+  };
+
+  // Función para alternar visibilidad de las contraseñas
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
   };
 
   useEffect(() => {
@@ -217,13 +233,15 @@ function RegisterForm() {
           </div>
 
           <div className="user-box">
-            <input type="password" name="password" value={formData.password} onChange={handleChange} required />
+            <input type={showPassword ? 'text' : 'password'} name="password" value={formData.password} onChange={handleChange} required />
             <label>Contraseña</label>
+            <span className="toggle-password" onClick={togglePasswordVisibility}>{showPassword ? '👁️' : '🙈'}</span>
           </div>
 
           <div className="user-box">
-            <input type="password" name="confirm_password" value={formData.confirm_password} onChange={handleChange} required />
+            <input type={showConfirmPassword ? 'text' : 'password'} name="confirm_password" value={formData.confirm_password} onChange={handleChange} required />
             <label>Confirmar Contraseña</label>
+            <span className="toggle-password" onClick={toggleConfirmPasswordVisibility}>{showConfirmPassword ? '👁️' : '🙈'}</span>
           </div>
 
           <div className="user-box">

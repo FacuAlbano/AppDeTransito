@@ -8,6 +8,7 @@ function Login() {
     password: ''
   });
 
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -32,6 +33,10 @@ function Login() {
     navigate('/register'); // Redirigir a la página de registro
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
     <div className="container">
       <div className="register-box">
@@ -52,13 +57,16 @@ function Login() {
           {/* Contraseña */}
           <div className="user-box">
             <input
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               name="password"
               value={formData.password}
               onChange={handleChange}
               required
             />
             <label>Contraseña</label>
+            <span className="toggle-password" onClick={togglePasswordVisibility}>
+              {showPassword ? '👁️' : '🙈'}
+            </span>
           </div>
 
           {/* Botón para iniciar sesión */}
