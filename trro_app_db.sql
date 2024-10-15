@@ -13,6 +13,8 @@ CREATE TABLE users(
 ALTER TABLE users
 ADD COLUMN nombre VARCHAR(255) NOT NULL AFTER email,
 ADD COLUMN apellido VARCHAR(255) NOT NULL AFTER nombre;
+ALTER TABLE users ADD COLUMN user VARCHAR(50);
+
 ALTER TABLE users
 CHANGE nombre first_name VARCHAR(255),
 CHANGE apellido last_name VARCHAR(255);

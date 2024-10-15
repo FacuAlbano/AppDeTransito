@@ -41,7 +41,7 @@ app.get('/', (req, res) => {
 
 // Ruta para registrar usuarios
 app.post('/register', (req, res) => {
-    const { first_name, last_name, email, password, birth_date, dni, direccion } = req.body;  
+    const { first_name, last_name, email, password, birth_date, dni, direccion, usuario } = req.body;  
     
     // Verificar si los datos llegan correctamente
     console.log('Datos recibidos:', req.body);
@@ -63,9 +63,9 @@ app.post('/register', (req, res) => {
         if (err) return res.status(500).json({ error: 'Error encriptando la contraseña' });
 
         // Insertar los datos del usuario en la base de datos
-        const query = `INSERT INTO users (first_name, last_name, email, password, birth_date, dni, address, user_type) 
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
-        db.query(query, [first_name, last_name, email, hashedPassword, birth_date, dni, direccion, user_type], (err, result) => {  
+        const query = `INSERT INTO usuarios (first_name, last_name, email, password, birth_date, dni, address, user, user_type) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+        db.query(query, [first_name, last_name, email, hashedPassword, birth_date, dni, direccion, usuario, user_type], (err, result) => {  
             if (err) {
                 console.error('Error al crear el usuario:', err);
                 return res.status(500).json({ error: 'Error al crear el usuario' });
