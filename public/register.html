@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAXMLCyyJ0HxLT_WhCiDog7GMqOfQFIH9g&libraries=places"></script>
+    <title>Registro</title>
+</head>
+<body>
+    <div class="container">
+        <div class="register-box">
+            <h2>Registro</h2>
+            <form id="registerForm">
+                <!-- Nombre -->
+                <div class="user-box">
+                    <input type="text" id="nombre" required>
+                    <label>Nombre</label>
+                </div>
+
+                <!-- Apellido -->
+                <div class="user-box">
+                    <input type="text" id="apellido" required>
+                    <label>Apellido</label>
+                </div>
+
+                <!-- Dirección -->
+                <div class="user-box">
+                    <input type="text" id="direccion" required>
+                    <label>Dirección</label>
+                </div>
+
+                <!-- Ciudad -->
+                <div class="user-box">
+                    <input type="text" id="ciudad" required>
+                    <label>Ciudad</label>
+                </div>
+
+                <!-- Provincia -->
+                <div class="user-box">
+                    <input type="text" id="provincia" required>
+                    <label>Provincia</label>
+                </div>
+
+                <!-- DNI -->
+                <div class="user-box">
+                    <input type="text" id="dni" required>
+                    <label>DNI</label>
+                </div>
+
+                <!-- Fecha de Nacimiento -->
+                <div class="user-box">
+                    <input type="date" id="fecha_nacimiento" required>
+                    <label>Fecha de Nacimiento</label>
+                </div>
+
+                <!-- Usuario -->
+                <div class="user-box">
+                    <input type="text" id="usuario" required>
+                    <label>Usuario</label>
+                </div>
+
+                <!-- Contraseña -->
+                <div class="user-box">
+                    <input type="password" id="password" required>
+                    <label>Contraseña</label>
+                    <span class="toggle-password" onclick="togglePassword('password')">👁</span>
+                </div>
+
+                <!-- Confirmar Contraseña -->
+                <div class="user-box">
+                    <input type="password" id="confirm_password" required>
+                    <label>Confirmar Contraseña</label>
+                    <span class="toggle-password" onclick="togglePassword('confirm_password')">👁</span>
+                </div>
+
+                <!-- Correo Electrónico -->
+                <div class="user-box">
+                    <input type="email" id="email" required>
+                    <label>Correo Electrónico</label>
+                </div>
+
+                <!-- Confirmar Correo Electrónico -->
+                <div class="user-box">
+                    <input type="email" id="confirm_email" required>
+                    <label>Confirmar Correo Electrónico</label>
+                </div>
+
+                <button type="submit" id="submit-btn">Registrarse</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
