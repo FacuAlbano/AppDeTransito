@@ -1,22 +1,59 @@
 const express = require('express'); 
+const path = require('path');
 const mysql = require('mysql2');    
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');  
 const jwt = require('jsonwebtoken');
 
 const app = express();
+
+// Middleware para procesar JSON y datos de formularios
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Servir archivos estáticos desde la carpeta 'public'
+app.use(express.static('public'));
 
 // Conexión a la base de datos
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: 'falbano.106',
-    database: 'trro_app_db'
+    database: 'trro_app_db',
+    port: 3307
+});
+
+// Verificar la conexión a la base de datos
+db.connect((err) => {
+    if (err) {
+        console.error('Error conectando a la base de datos:', err);
+    } else {
+        console.log('Conectado a la base de datos MySQL');
+    }
+});
+
+// Ruta para servir el formulario de registro
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'register.html'));
 });
 
 // Ruta para registrar usuarios
 app.post('/register', (req, res) => {
-    const { email, password, birth_date, dni, address, user_type } = req.body;
+    const { email, password, birth_date, dni, direccion } = req.body;  // Usar 'direccion' en lugar de 'address'
+    
+    // Verificar si los datos llegan correctamente
+    console.log('Datos recibidos:', req.body);
+
+    // Calcular la edad del usuario a partir de la fecha de nacimiento
+    const birthDate = new Date(birth_date);
+    const age = new Date().getFullYear() - birthDate.getFullYear();
+    
+    // Asignar tipo de usuario automáticamente según la edad
+    let user_type = '';
+    if (age < 16) {
+        user_type = 'menor_16';
+    } else {
+        user_type = 'mayor_16';
+    }
 
     // Encriptar la contraseña
     bcrypt.hash(password, 10, (err, hashedPassword) => {
@@ -25,14 +62,17 @@ app.post('/register', (req, res) => {
         // Insertar los datos del usuario en la base de datos
         const query = `INSERT INTO users (email, password, birth_date, dni, address, user_type) 
                         VALUES (?, ?, ?, ?, ?, ?)`;
-        db.query(query, [email, hashedPassword, birth_date, dni, address, user_type], (err, result) => {
-            if (err) return res.status(500).json({ error: 'Error al crear el usuario' });
+        db.query(query, [email, hashedPassword, birth_date, dni, direccion, user_type], (err, result) => {  // Usar 'direccion' correctamente
+            if (err) {
+                console.error('Error al crear el usuario:', err);
+                return res.status(500).json({ error: 'Error al crear el usuario' });
+            }
             res.status(201).json({ message: 'Usuario creado exitosamente' });
         });
     });
 });
 
-// Iniciar el servidor
+// Iniciar el servidor en el puerto 3000
 app.listen(3000, () => {
     console.log('Servidor corriendo en http://localhost:3000');
 });

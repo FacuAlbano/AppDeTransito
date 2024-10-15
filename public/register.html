@@ -11,82 +11,89 @@
     <div class="container">
         <div class="register-box">
             <h2>Registro</h2>
-            <form id="registerForm">
+            <form id="registerForm" action="/register" method="POST" autocomplete="off">
                 <!-- Nombre -->
                 <div class="user-box">
-                    <input type="text" id="nombre" required>
+                    <input type="text" name="nombre" id="nombre" required autocomplete="off">
                     <label>Nombre</label>
                 </div>
 
                 <!-- Apellido -->
                 <div class="user-box">
-                    <input type="text" id="apellido" required>
+                    <input type="text" name="apellido" id="apellido" required autocomplete="off">
                     <label>Apellido</label>
                 </div>
 
                 <!-- Dirección -->
                 <div class="user-box">
-                    <input type="text" id="direccion" required>
+                    <input type="text" name="direccion" id="direccion" required autocomplete="off">
                     <label>Dirección</label>
                 </div>
 
                 <!-- Ciudad -->
                 <div class="user-box">
-                    <input type="text" id="ciudad" required>
+                    <input type="text" name="ciudad" id="ciudad" required autocomplete="off">
                     <label>Ciudad</label>
                 </div>
 
                 <!-- Provincia -->
                 <div class="user-box">
-                    <input type="text" id="provincia" required>
+                    <input type="text" name="provincia" id="provincia" required autocomplete="off">
                     <label>Provincia</label>
                 </div>
 
                 <!-- DNI -->
                 <div class="user-box">
-                    <input type="text" id="dni" required>
+                    <input type="text" name="dni" id="dni" required autocomplete="off">
                     <label>DNI</label>
                 </div>
 
                 <!-- Fecha de Nacimiento -->
                 <div class="user-box">
-                    <input type="date" id="fecha_nacimiento" required>
+                    <input type="date" name="birth_date" id="fecha_nacimiento" required>
                     <label>Fecha de Nacimiento</label>
                 </div>
 
                 <!-- Usuario -->
                 <div class="user-box">
-                    <input type="text" id="usuario" required>
+                    <input type="text" name="usuario" id="usuario" required autocomplete="off">
                     <label>Usuario</label>
                 </div>
 
                 <!-- Contraseña -->
                 <div class="user-box">
-                    <input type="password" id="password" required>
+                    <input type="password" name="password" id="password" required autocomplete="new-password">
                     <label>Contraseña</label>
                     <span class="toggle-password" onclick="togglePassword('password')">👁</span>
                 </div>
 
                 <!-- Confirmar Contraseña -->
                 <div class="user-box">
-                    <input type="password" id="confirm_password" required>
+                    <input type="password" name="confirm_password" id="confirm_password" required autocomplete="new-password">
                     <label>Confirmar Contraseña</label>
                     <span class="toggle-password" onclick="togglePassword('confirm_password')">👁</span>
                 </div>
 
                 <!-- Correo Electrónico -->
                 <div class="user-box">
-                    <input type="email" id="email" required>
+                    <input type="email" name="email" id="email" required autocomplete="off">
                     <label>Correo Electrónico</label>
                 </div>
 
                 <!-- Confirmar Correo Electrónico -->
                 <div class="user-box">
-                    <input type="email" id="confirm_email" required>
+                    <input type="email" name="confirm_email" id="confirm_email" required autocomplete="off">
                     <label>Confirmar Correo Electrónico</label>
                 </div>
 
-                <button type="submit" id="submit-btn">Registrarse</button>
+                <!-- Botón de registro con animación -->
+                <button type="submit" id="submit-btn">
+                    Registrarse
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
             </form>
         </div>
     </div>

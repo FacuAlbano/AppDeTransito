@@ -1,13 +1,21 @@
+// Evitar autocompletar en campos sensibles
+document.getElementById('registerForm').setAttribute('autocomplete', 'off');
+
+// Validación del nombre
 document.getElementById('nombre').addEventListener('input', function () {
     const nombre = document.getElementById('nombre').value.trim();
     if (!/^[a-zA-Z\s]+$/.test(nombre)) {
         document.getElementById('nombre').setCustomValidity('El nombre solo puede contener letras.');
     } else {
-        document.getElementById('nombre').setCustomValidity(''); // Limpiar el mensaje de error si es correcto
+        document.getElementById('nombre').setCustomValidity('');
     }
-    document.getElementById('nombre').reportValidity(); // Mostrar el error inmediatamente
+    // Usar reportValidity solo si setCustomValidity ha cambiado el estado
+    if (!document.getElementById('nombre').checkValidity()) {
+        document.getElementById('nombre').reportValidity();
+    }
 });
 
+// Validación del apellido
 document.getElementById('apellido').addEventListener('input', function () {
     const apellido = document.getElementById('apellido').value.trim();
     if (!/^[a-zA-Z\s]+$/.test(apellido)) {
@@ -15,9 +23,12 @@ document.getElementById('apellido').addEventListener('input', function () {
     } else {
         document.getElementById('apellido').setCustomValidity('');
     }
-    document.getElementById('apellido').reportValidity();
+    if (!document.getElementById('apellido').checkValidity()) {
+        document.getElementById('apellido').reportValidity();
+    }
 });
 
+// Validación del DNI
 document.getElementById('dni').addEventListener('input', function () {
     const dni = document.getElementById('dni').value.trim();
     if (!/^\d+$/.test(dni)) {
@@ -25,19 +36,29 @@ document.getElementById('dni').addEventListener('input', function () {
     } else {
         document.getElementById('dni').setCustomValidity('');
     }
-    document.getElementById('dni').reportValidity();
+    if (!document.getElementById('dni').checkValidity()) {
+        document.getElementById('dni').reportValidity();
+    }
 });
 
+// Validación de la fecha de nacimiento
 document.getElementById('fecha_nacimiento').addEventListener('blur', function () {
     const fechaNacimiento = new Date(document.getElementById('fecha_nacimiento').value);
+    const hoy = new Date();
+
     if (isNaN(fechaNacimiento.getTime())) {
         document.getElementById('fecha_nacimiento').setCustomValidity('Por favor, ingrese una fecha de nacimiento válida.');
+    } else if (fechaNacimiento > hoy) {
+        document.getElementById('fecha_nacimiento').setCustomValidity('La fecha de nacimiento no puede ser futura.');
     } else {
         document.getElementById('fecha_nacimiento').setCustomValidity('');
     }
-    document.getElementById('fecha_nacimiento').reportValidity();
+    if (!document.getElementById('fecha_nacimiento').checkValidity()) {
+        document.getElementById('fecha_nacimiento').reportValidity();
+    }
 });
 
+// Validación del correo electrónico
 document.getElementById('email').addEventListener('input', function () {
     const email = document.getElementById('email').value.trim();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -45,9 +66,12 @@ document.getElementById('email').addEventListener('input', function () {
     } else {
         document.getElementById('email').setCustomValidity('');
     }
-    document.getElementById('email').reportValidity();
+    if (!document.getElementById('email').checkValidity()) {
+        document.getElementById('email').reportValidity();
+    }
 });
 
+// Confirmar el correo electrónico
 document.getElementById('confirm_email').addEventListener('input', function () {
     const email = document.getElementById('email').value.trim();
     const confirmEmail = document.getElementById('confirm_email').value.trim();
@@ -56,24 +80,39 @@ document.getElementById('confirm_email').addEventListener('input', function () {
     } else {
         document.getElementById('confirm_email').setCustomValidity('');
     }
-    document.getElementById('confirm_email').reportValidity();
+    if (!document.getElementById('confirm_email').checkValidity()) {
+        document.getElementById('confirm_email').reportValidity();
+    }
 });
 
-document.getElementById('password').addEventListener('input', function () {
+// Validación de la contraseña con las reglas: mínimo 8 caracteres, una mayúscula, una minúscula, un número y un símbolo
+document.getElementById('password').addEventListener('blur', function () {
     const password = document.getElementById('password').value.trim();
     const confirmPassword = document.getElementById('confirm_password').value.trim();
-    if (password !== confirmPassword) {
+
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{8,}$/;
+
+    if (!passwordRegex.test(password)) {
+        document.getElementById('password').setCustomValidity('La contraseña debe tener al menos 8 caracteres, incluir una mayúscula, una minúscula, un número y un símbolo.');
+    } else {
+        document.getElementById('password').setCustomValidity('');
+    }
+
+    if (password !== confirmPassword && confirmPassword !== '') {
         document.getElementById('confirm_password').setCustomValidity('Las contraseñas no coinciden.');
     } else {
         document.getElementById('confirm_password').setCustomValidity('');
     }
+
     document.getElementById('password').reportValidity();
     document.getElementById('confirm_password').reportValidity();
 });
 
-document.getElementById('confirm_password').addEventListener('input', function () {
+// Validar confirmación de contraseña
+document.getElementById('confirm_password').addEventListener('blur', function () {
     const password = document.getElementById('password').value.trim();
     const confirmPassword = document.getElementById('confirm_password').value.trim();
+
     if (password !== confirmPassword) {
         document.getElementById('confirm_password').setCustomValidity('Las contraseñas no coinciden.');
     } else {
@@ -85,25 +124,12 @@ document.getElementById('confirm_password').addEventListener('input', function (
 // Evitar que el formulario se envíe si hay errores de validación
 document.getElementById('registerForm').addEventListener('submit', function (event) {
     if (!this.checkValidity()) {
-        event.preventDefault();  // Evita que se envíe el formulario si hay errores
+        event.preventDefault();
         alert('Por favor, corrija los errores antes de enviar.');
     }
 });
 
-// Función para determinar el tipo de usuario según la fecha de nacimiento
-function determinarTipoUsuario(fechaNacimiento) {
-    const hoy = new Date();
-    const edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
-    const mes = hoy.getMonth() - fechaNacimiento.getMonth();
-
-    if (mes < 0 || (mes === 0 && hoy.getDate() < fechaNacimiento.getDate())) {
-        edad--;
-    }
-
-    return edad < 16 ? 'menor_16' : 'mayor_16';
-}
-
-// Función para mostrar/ocultar contraseñas
+// Función para alternar visibilidad de la contraseña
 function togglePassword(fieldId) {
     const field = document.getElementById(fieldId);
     if (field.type === 'password') {
