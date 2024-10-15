@@ -1,16 +1,20 @@
-const express = require('express'); 
+const express = require('express');
+const cors = require('cors'); // Importar cors correctamente
 const path = require('path');
 const mysql = require('mysql2');    
 const bcrypt = require('bcrypt');  
 
-const app = express();
+const app = express(); // Inicializar la app antes de usar middleware
+
+// Middleware para permitir solicitudes CORS
+app.use(cors());
 
 // Middleware para procesar JSON y datos de formularios
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Servir archivos estáticos desde la carpeta 'public'
-app.use(express.static('public'));
+// Servir archivos estáticos desde la carpeta 'build' (si es React)
+app.use(express.static(path.join(__dirname, 'build')));
 
 // Conexión a la base de datos
 const db = mysql.createConnection({
@@ -32,7 +36,7 @@ db.connect((err) => {
 
 // Ruta para servir el formulario de registro
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'register.html'));
+    res.sendFile(path.join(__dirname, 'build', 'index.html')); // Sirve el index de React si existe
 });
 
 // Ruta para registrar usuarios
@@ -69,6 +73,11 @@ app.post('/register', (req, res) => {
             res.status(201).json({ message: 'Usuario creado exitosamente' });
         });
     });
+});
+
+// Ruta para servir la aplicación de React (para producción)
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
 // Iniciar el servidor en el puerto 3000
