@@ -288,10 +288,89 @@ button:hover {
     cursor: pointer;
 }
 
-/* Estilos para el footer */
-footer {
+/* Footer pegado al final de la página */
+.footer {
+    background: linear-gradient(120deg, #2980b9, #8e44ad);
+    color: #fff;
     text-align: center;
     padding: 20px;
-    background-color: #111;
+    width: 100%;
+    flex-shrink: 0;
+}
+
+.footer .social-media a {
+    margin: 0 10px;
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.footer .social-media a:hover {
+    color: #03e9f4;
+}
+
+/* Ajuste para la barra de navegación */
+.navbar {
+    background: linear-gradient(120deg, #2980b9, #8e44ad);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    z-index: 1000;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.navbar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+
+.navbar ul li {
+    margin: 0 15px;
+}
+
+.navbar ul li a {
+    color: #fff;
+    text-decoration: none;
+    padding: 15px 0;
+    display: block;
+    transition: color 0.3s ease;
+}
+
+.navbar ul li a:hover {
+    color: #03e9f4;
+}
+
+.nav-logo-left, .nav-logo-right {
+    width: 50px; /* Ajusta el tamaño según tus necesidades */
+    height: auto;
+}
+
+.nav-logo-left {
+    margin-left: 15px;
+}
+
+.nav-logo-right {
+    margin-right: 15px;
+}
+
+/* Botón de iniciar/cerrar sesión */
+.login-btn {
+    background: linear-gradient(120deg, #2980b9, #8e44ad);
     color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.login-btn:hover {
+    background: linear-gradient(120deg, #1a6ca7, #7a2a90);
 }

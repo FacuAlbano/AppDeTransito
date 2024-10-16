@@ -247,6 +247,10 @@ function RegisterForm() {
           <button type="submit" id="submit-btn">
             Registrarse
           </button>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
         </form>
       </div>
     </div>
