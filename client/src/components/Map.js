@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { loadGoogleMapsApi } from '../utils/loadGoogleMapsApi'; // Asegúrate de importar la función
+import { loadGoogleMapsApi } from '../utils/loadGoogleMapsApi';
 
 function Map() {
   const [map, setMap] = useState(null);
@@ -8,15 +8,15 @@ function Map() {
   useEffect(() => {
     const initializeMap = async () => {
       try {
-        const googleMaps = await loadGoogleMapsApi(); // Cargar la API desde la función centralizada
-        const mapInstance = new googleMaps.Map(document.getElementById('map'), {
+        const google = await loadGoogleMapsApi();
+        const mapInstance = new google.maps.Map(document.getElementById('map'), {
           center: { lat: -32.944242, lng: -60.650539 },
           zoom: 14,
         });
         setMap(mapInstance);
         console.log("Mapa inicializado correctamente.");
       } catch (error) {
-        console.error("Error al cargar Google Maps API:", error);
+        console.error("Error al inicializar el mapa:", error);
       }
     };
 
@@ -33,6 +33,7 @@ function Map() {
         setUserPosition(pos);
         map.setCenter(pos);
 
+        // Volver a usar el objeto Marker
         new window.google.maps.Marker({
           position: pos,
           map: map,

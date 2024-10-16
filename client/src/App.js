@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
 import RegisterForm from './components/RegisterForm';
 import Login from './components/Login';
-import { loadGoogleMapsApi } from './utils/loadGoogleMapsApi';  // Importa la función centralizada
+import { loadGoogleMapsApi } from './utils/loadGoogleMapsApi';
 
 function App() {
   useEffect(() => {
