@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 
 module.exports = {
-  entry: './client/src/index.js',
+  entry: './client/src/index.js',  // Asegúrate de que esta ruta es correcta
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js'
@@ -18,6 +18,10 @@ module.exports = {
       {
         test: /\.css$/,
         use: ['style-loader', 'css-loader']
+      },
+      {
+        test: /\.(png|jpg|jpeg|gif)$/i, // Regla para manejar imágenes
+        type: 'asset/resource'
       }
     ]
   },
@@ -27,7 +31,8 @@ module.exports = {
     },
     compress: true,
     port: 3001,
-    hot: true
+    hot: true,
+    open: true // Esto abrirá el navegador automáticamente
   },
   resolve: {
     extensions: ['.js', '.jsx']

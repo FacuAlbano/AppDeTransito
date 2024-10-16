@@ -138,6 +138,7 @@ VALUES
 ('45678901', 'Calle San Martín 999, Rosario', 'Parque España, Rosario', 'Ruta más rápida: 5 minutos, tráfico leve'),
 ('56789012', 'Autopista Rosario-Córdoba', 'Terminal de Ómnibus, Córdoba', 'Ruta más rápida: 25 minutos, tráfico moderado');
 
+SELECT * FROM routes;
 
 -- Eliminar un usuario por su ID (ejemplo)
 DELETE FROM usuarios WHERE id = 2;

@@ -1,32 +1,25 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Home from './pages/Home';
 import RegisterForm from './components/RegisterForm';
 import Login from './components/Login';
+import { loadGoogleMapsApi } from './utils/loadGoogleMapsApi';  // Importa la función centralizada
 
 function App() {
   useEffect(() => {
-    const loadGoogleMapsScript = () => {
-      if (!window.google) {
-        const script = document.createElement('script');
-        // Acceder a la variable de entorno
-        const googleApiKey = process.env.REACT_APP_GOOGLE_API_KEY;
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${googleApiKey}&libraries=places`;
-        script.async = true;
-        script.onload = () => {
-          console.log('Google Maps API loaded successfully.');
-        };
-        script.onerror = () => {
-          console.error('Error loading Google Maps API.');
-        };
-        document.body.appendChild(script);
-      } else {
-        console.log('Google Maps API already loaded.');
+    const loadMaps = async () => {
+      try {
+        await loadGoogleMapsApi();  // Cargar la API de forma centralizada
+        console.log('Google Maps API cargada correctamente.');
+      } catch (error) {
+        console.error('Error al cargar Google Maps API:', error);
       }
     };
 
-    loadGoogleMapsScript();
+    loadMaps();  // Llama la función para cargar la API al montar el componente
 
     return () => {
+      // Elimina el script si ya fue agregado antes para evitar duplicaciones
       const googleScript = document.querySelector('script[src*="maps.googleapis.com"]');
       if (googleScript) {
         document.body.removeChild(googleScript);
@@ -38,9 +31,10 @@ function App() {
     <Router>
       <div>
         <Routes>
+          <Route path="/" element={<Home />} />
           <Route path="/register" element={<RegisterForm />} />
           <Route path="/login" element={<Login />} />
-          <Route path="*" element={<Login />} />
+          <Route path="*" element={<Home />} />
         </Routes>
       </div>
     </Router>

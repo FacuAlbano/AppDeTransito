@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import '../style.css';
+import { loadGoogleMapsApi } from '../utils/loadGoogleMapsApi';  // Importamos la función centralizada
 
 function RegisterForm() {
   const [formData, setFormData] = useState({
@@ -29,8 +30,6 @@ function RegisterForm() {
       ...prevData,
       [name]: value,
     }));
-
-    // Llamamos a la función de validación en tiempo real
     validateField(name, value);
   };
 
@@ -46,7 +45,6 @@ function RegisterForm() {
           input.setCustomValidity('');
         }
         break;
-
       case 'dni':
         if (!/^\d+$/.test(value)) {
           input.setCustomValidity('El DNI solo puede contener números.');
@@ -54,7 +52,6 @@ function RegisterForm() {
           input.setCustomValidity('');
         }
         break;
-
       case 'email':
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
           input.setCustomValidity('El correo electrónico no es válido.');
@@ -62,7 +59,6 @@ function RegisterForm() {
           input.setCustomValidity('');
         }
         break;
-
       case 'confirm_email':
         if (value !== formData.email) {
           input.setCustomValidity('Los correos electrónicos no coinciden.');
@@ -70,7 +66,6 @@ function RegisterForm() {
           input.setCustomValidity('');
         }
         break;
-
       case 'password':
         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{8,}$/;
         if (!passwordRegex.test(value)) {
@@ -79,7 +74,6 @@ function RegisterForm() {
           input.setCustomValidity('');
         }
         break;
-
       case 'confirm_password':
         if (value !== formData.password) {
           input.setCustomValidity('Las contraseñas no coinciden.');
@@ -87,7 +81,6 @@ function RegisterForm() {
           input.setCustomValidity('');
         }
         break;
-
       case 'birth_date':
         const birthDate = new Date(value);
         const today = new Date();
@@ -97,7 +90,6 @@ function RegisterForm() {
           input.setCustomValidity('');
         }
         break;
-
       default:
         input.setCustomValidity('');
         break;
@@ -139,47 +131,50 @@ function RegisterForm() {
   };
 
   useEffect(() => {
-    const initAutocomplete = () => {
-      const direccionInput = document.getElementById('direccion');
-      if (direccionInput) {
-        const autocomplete = new window.google.maps.places.Autocomplete(direccionInput, {
-          fields: ['address_components', 'formatted_address'],
-          types: ['address'],
-        });
+    const initAutocomplete = async () => {
+      try {
+        const googleMaps = await loadGoogleMapsApi();  // Cargar la API de forma centralizada
+        const direccionInput = document.getElementById('direccion');
+        if (direccionInput) {
+          const autocomplete = new googleMaps.places.Autocomplete(direccionInput, {
+            fields: ['address_components', 'formatted_address'],
+            types: ['address'],
+          });
 
-        autocomplete.addListener('place_changed', () => {
-          const place = autocomplete.getPlace();
-          if (!place.address_components) {
-            console.log('No se seleccionó una dirección válida');
-            return;
-          }
+          autocomplete.addListener('place_changed', () => {
+            const place = autocomplete.getPlace();
+            if (!place.address_components) {
+              console.log('No se seleccionó una dirección válida');
+              return;
+            }
 
-          const getAddressComponent = (types) => {
-            for (let i = 0; i < place.address_components.length; i++) {
-              for (let type of types) {
-                if (place.address_components[i].types.includes(type)) {
-                  return place.address_components[i].long_name;
+            const getAddressComponent = (types) => {
+              for (let i = 0; i < place.address_components.length; i++) {
+                for (let type of types) {
+                  if (place.address_components[i].types.includes(type)) {
+                    return place.address_components[i].long_name;
+                  }
                 }
               }
-            }
-            return '';
-          };
+              return '';
+            };
 
-          const ciudad = getAddressComponent(['locality']) || getAddressComponent(['administrative_area_level_2']);
-          const provincia = getAddressComponent(['administrative_area_level_1']);
+            const ciudad = getAddressComponent(['locality']) || getAddressComponent(['administrative_area_level_2']);
+            const provincia = getAddressComponent(['administrative_area_level_1']);
 
-          setFormData((prevData) => ({
-            ...prevData,
-            ciudad: ciudad || 'Ciudad no encontrada',
-            provincia: provincia || 'Provincia no encontrada',
-          }));
-        });
+            setFormData((prevData) => ({
+              ...prevData,
+              ciudad: ciudad || 'Ciudad no encontrada',
+              provincia: provincia || 'Provincia no encontrada',
+            }));
+          });
+        }
+      } catch (error) {
+        console.error('Error al cargar Google Maps API:', error);
       }
     };
 
-    if (window.google) {
-      initAutocomplete();
-    }
+    initAutocomplete();
   }, []);
 
   return (
